@@ -25,7 +25,10 @@ export const BLOCOS: readonly Bloco[] = [
   { id: 'personalizacao', rotulo: 'Seu jeito', ritmo: 'medio' },
   { id: 'construtora', rotulo: '45 anos', ritmo: 'respiravel' },
   { id: 'fila', rotulo: 'A fila', ritmo: 'denso' },
-  { id: 'duvidas', rotulo: 'Dúvidas', ritmo: 'denso' },
+  /* Longo, mas de leitura escaneável: quem chega aqui lê só a pergunta
+     que interessa. Denso é o que exige atenção contínua — o scrub das
+     plantas e o formulário. */
+  { id: 'duvidas', rotulo: 'Dúvidas', ritmo: 'medio' },
 ] as const
 
 export type Tipologia = {

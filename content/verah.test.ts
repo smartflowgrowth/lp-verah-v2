@@ -2,10 +2,20 @@ import { describe, it, expect } from 'vitest'
 import { verah, BLOCOS } from './verah'
 
 describe('conteúdo do Verah', () => {
-  it('tem os oito blocos da sessão, em ordem e com id único', () => {
-    expect(BLOCOS).toHaveLength(8)
+  it('tem os blocos da sessão com id único, terminando nas dúvidas', () => {
     const ids = BLOCOS.map((b) => b.id)
-    expect(new Set(ids).size).toBe(8)
+    expect(new Set(ids).size).toBe(BLOCOS.length)
+    // A narrativa abre na vista e fecha no FAQ, que é o bloco que leva o
+    // HTML servido acima do mínimo de palavras exigido pelo prerender.
+    expect(ids[0]).toBe('vista')
+    expect(ids.at(-1)).toBe('duvidas')
+    expect(ids).toContain('fila')
+  })
+
+  it('nunca põe dois blocos densos em sequência', () => {
+    const densos = BLOCOS.map((b) => b.ritmo === 'denso')
+    const seguidos = densos.some((d, i) => d && densos[i + 1])
+    expect(seguidos).toBe(false)
   })
 
   it('tem as quatro tipologias reais do empreendimento', () => {
