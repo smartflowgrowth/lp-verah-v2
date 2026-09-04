@@ -62,7 +62,7 @@ export function Construtora() {
         <dl className="mt-20 grid grid-cols-2 gap-12 md:grid-cols-4">
           {construtora.numeros.map((n) => (
             <div key={n.rotulo}>
-              <dt className="font-display text-[clamp(1.75rem,4vw,3rem)] leading-none">
+              <dt className="font-display text-[clamp(1.5rem,3.4vw,2.75rem)] leading-none whitespace-nowrap">
                 <Contador
                   alvo={n.valor}
                   prefixo={n.prefixo}

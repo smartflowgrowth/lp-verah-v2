@@ -46,6 +46,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       track('form_enviou', {
         interesse: dados.interesse,
         plantaInteresse: dados.plantaInteresse ?? null,
+        temCorretor: Boolean(dados.corretor),
       })
       setEnviado(true)
       aoConcluir?.()
@@ -141,6 +142,24 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
         </div>
         {errors.interesse && <p className="mt-1 text-xs text-brick">{errors.interesse.message}</p>}
       </fieldset>
+
+      <div>
+        <label
+          htmlFor="corretor"
+          className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70"
+        >
+          Corretor responsável <span className="normal-case opacity-60">(opcional)</span>
+        </label>
+        <input
+          id="corretor"
+          type="text"
+          autoComplete="off"
+          placeholder="Se veio por indicação, nos diga de quem"
+          className={campo}
+          {...register('corretor')}
+        />
+        {errors.corretor && <p className="mt-1 text-xs text-brick">{errors.corretor.message}</p>}
+      </div>
 
       {/* Honeypot: invisível para gente, irresistível para bot. */}
       <input

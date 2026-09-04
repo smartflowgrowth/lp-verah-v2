@@ -229,7 +229,7 @@ export const verah = {
   },
 
   cta: {
-    fixo: 'Falar com um especialista',
+    fixo: 'Cadastre seu interesse',
     rotuloDrawer: 'Entrar na lista exclusiva',
   },
 

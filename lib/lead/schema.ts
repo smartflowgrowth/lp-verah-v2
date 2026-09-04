@@ -30,6 +30,9 @@ export const esquemaLead = z.object({
 
   plantaInteresse: z.string().optional(),
 
+  /** Opcional: quem preencher veio por indicação de um corretor. */
+  corretor: z.string().trim().max(80, 'Nome muito longo.').optional(),
+
   /** Honeypot. Preenchido significa bot: a mesma convenção do lead-lp. */
   empresa: z.string().max(0).optional(),
 })

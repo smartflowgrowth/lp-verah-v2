@@ -68,6 +68,14 @@ export function Plantas() {
             <p className="mt-6 max-w-2xl text-base leading-relaxed opacity-75">
               {verah.plantas.apoio}
             </p>
+            {/* Indicador da tipologia em foco. Vive no cabeçalho, não sob os
+                cards: embaixo ele disputava atenção com os próprios cards. */}
+            <p
+              aria-live="polite"
+              className="mt-8 hidden text-[11px] uppercase tracking-[0.24em] text-brick md:block"
+            >
+              {visivel.areaRotulo} — {visivel.dormitorios} dormitórios · {visivel.vagas}
+            </p>
           </div>
         </div>
 
@@ -99,11 +107,6 @@ export function Plantas() {
             </article>
           ))}
         </div>
-
-        {/* Indicador da tipologia em foco, só no desktop pinado. */}
-        <p className="pointer-events-none absolute bottom-10 left-1/2 hidden -translate-x-1/2 text-[11px] uppercase tracking-[0.24em] opacity-45 md:block">
-          {visivel.areaRotulo} — {visivel.dormitorios} dormitórios
-        </p>
       </div>
     </Block>
   )

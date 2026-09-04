@@ -38,21 +38,27 @@ export function ProgressRail() {
             const ativo = bloco.id === blocoAtivo
             return (
               <li key={bloco.id} className="group flex items-center justify-end gap-3">
-                <span
-                  className={`text-[10px] uppercase tracking-[0.18em] transition-opacity duration-300 ${
-                    ativo ? 'opacity-70' : 'opacity-0 group-hover:opacity-50'
-                  }`}
-                >
-                  {bloco.rotulo}
-                </span>
                 <a
                   href={`#${bloco.id}`}
-                  aria-label={`Ir para ${bloco.rotulo}`}
                   aria-current={ativo ? 'true' : undefined}
-                  className={`block rounded-full transition-all duration-300 ${
-                    ativo ? 'h-6 w-[3px] bg-gold' : 'h-[3px] w-[3px] bg-cocoa/30 hover:bg-cocoa/60'
-                  }`}
-                />
+                  className="flex items-center justify-end gap-3"
+                >
+                  <span
+                    className={`text-[11px] uppercase transition-all duration-300 ${
+                      ativo
+                        ? 'font-medium tracking-[0.2em] text-cocoa opacity-100'
+                        : 'tracking-[0.16em] text-cocoa/55 opacity-100 group-hover:text-cocoa'
+                    }`}
+                  >
+                    {bloco.rotulo}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={`block rounded-full transition-all duration-300 ${
+                      ativo ? 'h-7 w-[3px] bg-gold' : 'h-[3px] w-[3px] bg-cocoa/35 group-hover:bg-cocoa/70'
+                    }`}
+                  />
+                </a>
               </li>
             )
           })}

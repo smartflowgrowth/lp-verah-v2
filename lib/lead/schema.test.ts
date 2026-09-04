@@ -41,6 +41,19 @@ describe('esquemaLead', () => {
     expect(r.success).toBe(false)
   })
 
+  it('aceita o corretor indicado, que é opcional', () => {
+    const semCorretor = esquemaLead.safeParse(valido)
+    expect(semCorretor.success).toBe(true)
+    const comCorretor = esquemaLead.safeParse({ ...valido, corretor: '  Ana Souza  ' })
+    expect(comCorretor.success).toBe(true)
+    if (comCorretor.success) expect(comCorretor.data.corretor).toBe('Ana Souza')
+  })
+
+  it('recusa nome de corretor absurdamente longo', () => {
+    const r = esquemaLead.safeParse({ ...valido, corretor: 'x'.repeat(81) })
+    expect(r.success).toBe(false)
+  })
+
   it('aceita plantaInteresse opcional', () => {
     const r = esquemaLead.safeParse({ ...valido, plantaInteresse: '70 m²' })
     expect(r.success).toBe(true)
