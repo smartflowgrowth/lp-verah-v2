@@ -22,7 +22,13 @@ export function Block({ id, children, className = '' }: Props) {
   const ref = useRef<HTMLElement | null>(null)
   const modo = useSessionMotion()
   const { marcarBlocoAtivo } = useSessao()
-  const visivel = useInView(ref, { amount: 0.35 })
+  // Faixa fina no meio da tela: o bloco é "o ativo" quando cruza o centro.
+  //
+  // Threshold por fração (`amount`) não serve aqui. Um bloco mais alto que
+  // ~3x a viewport nunca consegue ter 35% de si mesmo visível, e o quintal
+  // (3809 px numa tela de 900 px, máximo de 24%) cai exatamente nesse caso —
+  // ficaria eternamente fora do trilho e sem emitir evento.
+  const visivel = useInView(ref, { margin: '-50% 0px -50% 0px' })
   const jaContado = useRef(false)
 
   useEffect(() => {
@@ -43,7 +49,9 @@ export function Block({ id, children, className = '' }: Props) {
       variants={revelarBloco}
       initial="oculto"
       whileInView="visivel"
-      viewport={{ once: true, amount: 0.2 }}
+      // Revela quando o topo do bloco sobe 15% acima da borda inferior —
+      // independe da altura do bloco, ao contrário de `amount`.
+      viewport={{ once: true, margin: '0px 0px -15% 0px' }}
     >
       {children}
     </motion.section>
