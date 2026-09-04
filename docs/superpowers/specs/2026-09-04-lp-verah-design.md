@@ -249,9 +249,18 @@ uma marca serif e terrosa — o reskin completo custaria mais que partir dos
 tokens reais do Verah, que estão disponíveis e exatos. shadcn entra sem M3,
 estilizado direto pela marca.
 
-**Figma MCP e Framer MCP não estão instalados.** A extração de tokens 1:1
+**O Figma MCP oficial foi instalado** (`https://mcp.figma.com/mcp`, escopo
+`user`, em 04/09/2026), mas **não será usado no Verah**: o arquivo Figma
+pertence à agência da construtora e não temos acesso. A extração de tokens 1:1
 prevista no prompt foi feita a partir das CSS custom properties do site
-oficial, que são a mesma fonte de verdade.
+oficial — que são a mesma fonte de verdade, já compilada. O servidor fica
+disponível para projetos futuros. Requer plano Figma pago para devolver código
+e variáveis.
+
+**Framer MCP não será instalado.** Não existe servidor oficial da Framer — só
+implementações de terceiros, que exigiriam acesso de escrita a um projeto
+Framer. E não existe projeto Framer do Verah, então não haveria o que ler.
+Revisitar apenas se surgir um projeto Framer com necessidade concreta.
 
 **Expo fica fora desta rodada.** Portabilidade para app nativo não tem
 requisito concreto hoje; a decisão que a preserva é manter `submitLead` e
