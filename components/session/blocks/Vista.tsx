@@ -75,7 +75,7 @@ export function Vista() {
           </p>
         </div>
 
-        <p className="relative z-10 mt-12 max-w-xl text-center font-display text-xl leading-relaxed opacity-80 sm:text-2xl">
+        <p className="relative z-10 mt-8 max-w-xl text-center font-display text-xl leading-relaxed opacity-80 sm:text-2xl md:mt-12">
           {verah.vista.titulo}
         </p>
 
@@ -84,7 +84,7 @@ export function Vista() {
             Ele sai de cena junto com o herói: deixá-lo apenas rolar fazia um
             botão cortado pela metade atravessar o topo da tela no caminho. */}
         <motion.div
-          className="relative z-10 mt-10"
+          className="relative z-10 mt-6 md:mt-10"
           style={modo.anima ? { opacity: opacidadeCta } : undefined}
         >
           <CtaPrincipal />

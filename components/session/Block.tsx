@@ -36,14 +36,25 @@ export function Block({ id, children, className = '' }: Props) {
   const visivel = useInView(ref, { margin: '-50% 0px -50% 0px' })
   const jaContado = useRef(false)
 
-  // 0 quando o topo do bloco encosta na base da tela, 1 quando o fim dele
-  // sai por cima. Acende nos primeiros 30% da travessia e apaga nos últimos
-  // 30%: com margens menores, duas sessões ficavam cheias ao mesmo tempo.
-  const { scrollYProgress } = useScroll({
+  // Dois trechos independentes, medidos contra a ALTURA DA TELA e não contra
+  // a altura do bloco: acende enquanto o topo sobe da base até 60% da tela,
+  // e apaga enquanto o fim sobe de 40% até o topo.
+  //
+  // Uma fração da travessia não serve. O bloco do lazer tem 3809 px, então
+  // "30% da travessia" davam 1413 px — mais de uma tela inteira — e o
+  // conteúdo do topo ficava permanentemente translúcido enquanto era lido.
+  // Com distâncias fixas, o miolo de qualquer bloco fica sempre opaco.
+  const { scrollYProgress: entrando } = useScroll({
     target: ref,
-    offset: ['start end', 'end start'],
+    offset: ['start end', 'start 55%'],
   })
-  const opacidade = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const { scrollYProgress: saindo } = useScroll({
+    target: ref,
+    offset: ['end 45%', 'end start'],
+  })
+  const opacidade = useTransform([entrando, saindo], ([e, s]: number[]) =>
+    Math.max(0, Math.min(e, 1 - s)),
+  )
 
   useEffect(() => {
     if (!visivel) return
@@ -58,9 +69,16 @@ export function Block({ id, children, className = '' }: Props) {
     <motion.section
       ref={ref}
       id={id}
-      // A margem vertical é o "intervalo limpo" entre uma sessão e a
-      // seguinte: sem ela, a próxima já entrou antes de a anterior apagar.
-      className={`relative my-[14vh] ${className}`}
+      // A margem vertical é a folga que permite uma sessão apagar antes de a
+      // seguinte acender. Com blocos encostados os dois requisitos brigam:
+      // o bloco precisa estar opaco enquanto está na tela para ser legível,
+      // e precisa ter apagado quando o próximo chega. O espaço resolve.
+      // (Margens verticais de irmãos colapsam, então o intervalo é 30vh.)
+      //
+      // `first`/`last` zeram as pontas: a margem no primeiro bloco abria a
+      // página com uma faixa vazia antes do logo e empurrava o CTA do herói
+      // para fora da tela. O intervalo é ENTRE sessões, não nas bordas.
+      className={`relative my-[30vh] first:mt-0 last:mb-0 ${className}`}
       // Com movimento reduzido nada desvanece: o conteúdo fica sempre opaco.
       style={modo.anima ? { opacity: opacidade } : undefined}
     >
