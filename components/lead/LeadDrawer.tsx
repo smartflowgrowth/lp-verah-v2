@@ -51,11 +51,27 @@ export function LeadDrawer() {
         no iPhone o drawer ficaria com 747 px enquanto só 476 estão
         visíveis, e metade do formulário nasceria embaixo do teclado.
       */}
+      {/*
+        A altura sai de uma variável CSS, e não de um style inline: a classe
+        precisa de `!` para vencer o max-h que o componente base aplica por
+        direção, e `!important` numa classe vence style inline — o limite do
+        teclado era simplesmente ignorado.
+      */}
       <DrawerContent
-        className="border-cocoa/15 bg-cream text-cocoa max-h-[92dvh]! sm:max-h-none! sm:w-[440px] sm:max-w-[440px]!"
-        style={teclado.alturaVisivel ? { maxHeight: teclado.alturaVisivel } : undefined}
+        className="border-cocoa/15 bg-cream text-cocoa max-h-[var(--altura-util)]! sm:max-h-none! sm:w-[440px] sm:max-w-[440px]!"
+        style={
+          {
+            '--altura-util': teclado.alturaVisivel ? `${teclado.alturaVisivel}px` : '92dvh',
+          } as React.CSSProperties
+        }
       >
-        <div className="overflow-y-auto overscroll-contain p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:p-6">
+        <div
+          className={`overflow-y-auto overscroll-contain sm:p-6 ${
+            teclado.aberto
+              ? 'px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]'
+              : 'p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]'
+          }`}
+        >
           {/* Com o teclado aberto o cabeçalho sai de cena: são ~50 px que
               decidem se o botão de enviar fica alcançável sem rolar. O
               DrawerTitle continua no DOM porque o diálogo é rotulado por

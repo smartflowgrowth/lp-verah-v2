@@ -87,7 +87,10 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       ref={formRef}
       onSubmit={handleSubmit(aoEnviar)}
       noValidate
-      className="flex flex-col gap-3 sm:gap-4"
+      /* Com o teclado aberto os campos se aproximam: são os ~30 px que
+         separam o botão de enviar de ficar abaixo da borda. Volta ao
+         normal assim que o teclado fecha. */
+      className={`flex flex-col ${teclado.aberto ? 'gap-2' : 'gap-3'} sm:gap-4`}
     >
       {plantaInteresse && !teclado.aberto && (
         <p className="rounded-lg bg-gold/15 px-3 py-1.5 text-xs tracking-wide sm:px-4 sm:py-2">
@@ -158,29 +161,23 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
         {errors.interesse && <p className="mt-1 text-xs text-brick">{errors.interesse.message}</p>}
       </fieldset>
 
-      {/* Recolhido por padrão: continua aberto e opcional, mas só ocupa
-          altura para quem de fato veio por indicação. São 66 px que, no
-          celular, decidem se o botão de enviar fica acima do teclado. */}
-      <details className="group">
-        <summary className="flex cursor-pointer list-none items-center gap-2 text-xs uppercase tracking-[0.14em] opacity-70 transition-opacity hover:opacity-100 [&::-webkit-details-marker]:hidden">
-          <span
-            aria-hidden="true"
-            className="text-brick transition-transform duration-200 group-open:rotate-45"
-          >
-            +
-          </span>
-          Veio indicado por um corretor?
-        </summary>
+      <div>
+        <label
+          htmlFor="corretor"
+          className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70"
+        >
+          Corretor responsável <span className="normal-case opacity-60">(opcional)</span>
+        </label>
         <input
           id="corretor"
           type="text"
           autoComplete="off"
-          placeholder="Nome do corretor"
-          className={`${campo} mt-2`}
+          placeholder="Se veio por indicação, nos diga de quem"
+          className={campo}
           {...register('corretor')}
         />
         {errors.corretor && <p className="mt-1 text-xs text-brick">{errors.corretor.message}</p>}
-      </details>
+      </div>
 
       {/* Honeypot: invisível para gente, irresistível para bot. */}
       <input
