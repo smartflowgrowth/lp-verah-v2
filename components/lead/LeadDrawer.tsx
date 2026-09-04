@@ -68,7 +68,7 @@ export function LeadDrawer() {
         <div
           className={`overflow-y-auto overscroll-contain sm:p-6 ${
             teclado.aberto
-              ? 'px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]'
+              ? 'px-4 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]'
               : 'p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]'
           }`}
         >

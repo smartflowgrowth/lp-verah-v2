@@ -25,13 +25,26 @@ type Props = {
    visível na faixa que sobra acima do teclado. text-base evita o zoom
    automático do Safari no iOS, que dispara com fonte menor que 16 px e
    desalinha a página inteira. */
-const campo =
-  'w-full rounded-lg border border-cocoa/20 bg-cream px-4 py-2.5 text-base outline-none transition-colors placeholder:text-cocoa/40 focus:border-gold focus:ring-2 focus:ring-gold/30 sm:py-3 sm:text-sm'
+const campoBase =
+  'w-full rounded-lg border border-cocoa/20 bg-cream px-4 text-base outline-none transition-colors placeholder:text-cocoa/40 focus:border-gold focus:ring-2 focus:ring-gold/30 sm:py-3 sm:text-sm'
 
 export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
   // Mantém o campo em foco visível quando o teclado do celular sobe.
   const formRef = useCampoVisivel<HTMLFormElement>()
   const teclado = useTecladoAberto()
+  /* Tudo encolhe enquanto o teclado ocupa metade da tela, e volta ao normal
+     quando ele fecha. text-base (16px) permanece: abaixo disso o Safari do
+     iOS dá zoom ao focar. */
+  const campo = `${campoBase} ${teclado.aberto ? 'py-2' : 'py-2.5'}`
+  const rotulo = `block text-xs uppercase tracking-[0.14em] opacity-70 ${
+    teclado.aberto ? 'mb-0.5' : 'mb-1'
+  }`
+  const chip = `flex-1 cursor-pointer whitespace-nowrap rounded-full border border-cocoa/20 px-2 text-center text-xs transition-colors has-[:checked]:border-gold has-[:checked]:bg-gold/20 sm:flex-none sm:px-4 sm:text-sm ${
+    teclado.aberto ? 'py-1.5' : 'py-2'
+  }`
+  const legenda = `text-xs uppercase tracking-[0.14em] opacity-70 ${
+    teclado.aberto ? 'mb-1' : 'mb-1.5 sm:mb-2'
+  }`
   const [enviado, setEnviado] = useState(false)
   const [erroEnvio, setErroEnvio] = useState<string | null>(null)
 
@@ -90,16 +103,10 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       /* Com o teclado aberto os campos se aproximam: são os ~30 px que
          separam o botão de enviar de ficar abaixo da borda. Volta ao
          normal assim que o teclado fecha. */
-      className={`flex flex-col ${teclado.aberto ? 'gap-2' : 'gap-3'} sm:gap-4`}
+      className={`flex flex-col ${teclado.aberto ? 'gap-1.5' : 'gap-3'} sm:gap-4`}
     >
-      {plantaInteresse && !teclado.aberto && (
-        <p className="rounded-lg bg-gold/15 px-3 py-1.5 text-xs tracking-wide sm:px-4 sm:py-2">
-          Interesse na planta de <strong>{plantaInteresse}</strong>
-        </p>
-      )}
-
       <div>
-        <label htmlFor="nome" className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70">
+        <label htmlFor="nome" className={rotulo}>
           Nome e sobrenome
         </label>
         <input id="nome" type="text" autoComplete="name" className={campo} {...register('nome')} />
@@ -109,7 +116,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       <div>
         <label
           htmlFor="telefone"
-          className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70"
+          className={rotulo}
         >
           WhatsApp com DDD
         </label>
@@ -128,7 +135,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       </div>
 
       <div>
-        <label htmlFor="email" className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70">
+        <label htmlFor="email" className={rotulo}>
           E-mail <span className="normal-case opacity-60">(opcional)</span>
         </label>
         <input
@@ -142,7 +149,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
       </div>
 
       <fieldset>
-        <legend className="mb-1.5 text-xs uppercase tracking-[0.14em] opacity-70 sm:mb-2">
+        <legend className={legenda}>
           Seu interesse
         </legend>
         {/* Uma linha só no celular: quebrar em duas custava 40 px da faixa
@@ -151,7 +158,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
           {INTERESSES.map((valor) => (
             <label
               key={valor}
-              className="flex-1 cursor-pointer whitespace-nowrap rounded-full border border-cocoa/20 px-3 py-2 text-center text-xs transition-colors has-[:checked]:border-gold has-[:checked]:bg-gold/20 sm:flex-none sm:px-4 sm:text-sm"
+              className={chip}
             >
               <input type="radio" value={valor} className="sr-only" {...register('interesse')} />
               {ROTULO_INTERESSE[valor]}
@@ -161,10 +168,34 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
         {errors.interesse && <p className="mt-1 text-xs text-brick">{errors.interesse.message}</p>}
       </fieldset>
 
+      <fieldset>
+        <legend className={legenda}>
+          Planta de interesse <span className="normal-case opacity-60">(opcional)</span>
+        </legend>
+        {/* Chega marcada quando a pessoa veio do CTA de um card de planta;
+            em branco quando veio do botão fixo ou do formulário do fim. */}
+        <div className="flex flex-nowrap gap-1.5 sm:flex-wrap sm:gap-2">
+          {verah.tipologias.map((t) => (
+            <label
+              key={t.id}
+              className={chip}
+            >
+              <input
+                type="radio"
+                value={t.areaRotulo}
+                className="sr-only"
+                {...register('plantaInteresse')}
+              />
+              {t.areaRotulo}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
       <div>
         <label
           htmlFor="corretor"
-          className="mb-1 block text-xs uppercase tracking-[0.14em] opacity-70"
+          className={rotulo}
         >
           Corretor responsável <span className="normal-case opacity-60">(opcional)</span>
         </label>
