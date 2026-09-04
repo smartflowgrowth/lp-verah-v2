@@ -21,9 +21,16 @@ describe('esquemaLead', () => {
     expect(r.success).toBe(false)
   })
 
-  it('recusa e-mail malformado', () => {
+  it('recusa e-mail malformado quando preenchido', () => {
     const r = esquemaLead.safeParse({ ...valido, email: 'matheus@' })
     expect(r.success).toBe(false)
+  })
+
+  it('aceita cadastro sem e-mail: o campo é opcional', () => {
+    const vazio = esquemaLead.safeParse({ ...valido, email: '' })
+    expect(vazio.success).toBe(true)
+    const ausente = esquemaLead.safeParse({ ...valido, email: undefined })
+    expect(ausente.success).toBe(true)
   })
 
   it('recusa telefone com dígitos a mais mesmo depois de tirar o país', () => {

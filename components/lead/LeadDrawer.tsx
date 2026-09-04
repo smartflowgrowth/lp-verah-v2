@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/drawer'
 import { LeadForm } from './LeadForm'
 import { useSessao } from '@/components/session/SessionProvider'
+import { useTecladoAberto } from '@/lib/scroll/useCampoVisivel'
 import { verah } from '@/content/verah'
 
 /**
@@ -20,6 +21,7 @@ import { verah } from '@/content/verah'
  */
 export function LeadDrawer() {
   const { drawerAberto, fecharDrawer, plantaInteresse } = useSessao()
+  const teclado = useTecladoAberto()
   const [direcao, setDirecao] = useState<'bottom' | 'right'>('bottom')
 
   // De baixo no celular, lateral no desktop — sem trocar de componente.
@@ -41,17 +43,39 @@ export function LeadDrawer() {
     >
       {/* O max-w-sm do componente base é estreito demais para o formulário;
           o `!` vence a variante composta que o shadcn aplica por direção. */}
-      <DrawerContent className="border-cocoa/15 bg-cream text-cocoa sm:w-[440px] sm:max-w-[440px]!">
-        <div className="overflow-y-auto p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          <DrawerHeader className="p-0 text-left">
-            <DrawerTitle className="font-display text-2xl leading-tight">
-              {verah.fila.titulo}
+      {/* 92dvh vence o max-h-[80vh] que o componente base aplica ao drawer
+          de baixo: com o teclado aberto, cada faixa de tela conta. */}
+      {/*
+        Com o teclado aberto, a altura vem da visualViewport em pixels — e
+        não de dvh. `dvh` deriva de innerHeight, que o teclado NÃO altera:
+        no iPhone o drawer ficaria com 747 px enquanto só 476 estão
+        visíveis, e metade do formulário nasceria embaixo do teclado.
+      */}
+      <DrawerContent
+        className="border-cocoa/15 bg-cream text-cocoa max-h-[92dvh]! sm:max-h-none! sm:w-[440px] sm:max-w-[440px]!"
+        style={teclado.alturaVisivel ? { maxHeight: teclado.alturaVisivel } : undefined}
+      >
+        <div className="overflow-y-auto overscroll-contain p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:p-6">
+          {/* Com o teclado aberto o cabeçalho sai de cena: são ~50 px que
+              decidem se o botão de enviar fica alcançável sem rolar. O
+              DrawerTitle continua no DOM porque o diálogo é rotulado por
+              ele — só deixa de ocupar altura. */}
+          <DrawerHeader className={`p-0 text-left ${teclado.aberto ? 'sr-only' : ''}`}>
+            {/* Curto no celular: a pessoa acabou de clicar no CTA e já sabe
+                o que está fazendo ali. O título completo custaria duas
+                linhas da faixa que sobra acima do teclado. */}
+            <DrawerTitle className="font-display text-base leading-tight sm:text-2xl">
+              <span className="sm:hidden">Entre na lista do Verah</span>
+              <span className="hidden sm:inline">{verah.fila.titulo}</span>
             </DrawerTitle>
-            <DrawerDescription className="mt-2 text-sm opacity-70">
+            {/* O texto de apoio some no celular: é contexto que a pessoa já
+                leu na página, e ali ele empurraria os campos para baixo do
+                teclado. */}
+            <DrawerDescription className="mt-2 hidden text-sm opacity-70 sm:block">
               {verah.fila.apoio}
             </DrawerDescription>
           </DrawerHeader>
-          <div className="mt-6">
+          <div className="mt-5 sm:mt-6">
             <LeadForm plantaInteresse={plantaInteresse} />
           </div>
         </div>

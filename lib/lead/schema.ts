@@ -24,7 +24,10 @@ export const esquemaLead = z.object({
       'Informe um número com DDD.',
     ),
 
-  email: z.email('Confira o e-mail.'),
+  /* Opcional: muita gente no celular abandona o formulário no campo de
+     e-mail. O telefone já basta para o atendimento. Vazio passa; o que
+     for preenchido ainda precisa ser um e-mail válido. */
+  email: z.union([z.literal(''), z.email('Confira o e-mail.')]).optional(),
 
   interesse: z.enum(INTERESSES, { message: 'Escolha uma opção.' }),
 
