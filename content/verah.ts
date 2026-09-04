@@ -7,6 +7,7 @@ export type IdBloco =
   | 'personalizacao'
   | 'construtora'
   | 'fila'
+  | 'duvidas'
 
 export type Bloco = {
   id: IdBloco
@@ -24,6 +25,7 @@ export const BLOCOS: readonly Bloco[] = [
   { id: 'personalizacao', rotulo: 'Seu jeito', ritmo: 'medio' },
   { id: 'construtora', rotulo: '45 anos', ritmo: 'respiravel' },
   { id: 'fila', rotulo: 'A fila', ritmo: 'denso' },
+  { id: 'duvidas', rotulo: 'Dúvidas', ritmo: 'denso' },
 ] as const
 
 export type Tipologia = {
@@ -33,6 +35,11 @@ export type Tipologia = {
   dormitorios: 2 | 3
   vagas: string
   destaque: string
+}
+
+export type Pergunta = {
+  pergunta: string
+  resposta: string
 }
 
 export type ImagemBook = {
@@ -231,6 +238,91 @@ export const verah = {
   cta: {
     fixo: 'Cadastre seu interesse',
     rotuloDrawer: 'Entrar na lista exclusiva',
+  },
+
+  /**
+   * Um termo-alvo por página, exclusivo entre as LPs do subdomínio.
+   * `verah caçapava` é termo de marca: quem busca já viu o anúncio.
+   */
+  seo: {
+    termoAlvo: 'verah caçapava',
+    url: 'https://lancamentos.icasaimob.com.br/verah/',
+    ogImagem: 'https://lancamentos.icasaimob.com.br/verah/og-verah.jpg',
+    atualizadaEm: '2026-09-04',
+    tituloH1: 'Apartamentos de 2 e 3 dormitórios em Caçapava',
+  },
+
+  duvidas: {
+    titulo: 'Perguntas frequentes sobre o Verah, em Caçapava',
+    apoio:
+      'O Verah está em pré-lançamento. Reunimos abaixo o que mais perguntam sobre o empreendimento, a localização e as condições.',
+    perguntas: [
+      {
+        pergunta: 'Onde fica o Verah, em Caçapava?',
+        resposta:
+          'O Verah fica na Av. Dr. José de Moura Resende, no bairro Vera Cruz, em Caçapava, interior de São Paulo. É uma região consolidada e tranquila, a três minutos de carro da Av. Brasil, a quatro minutos do centro da cidade e com acesso rápido à Via Dutra, o que encurta o caminho para a Nestlé e para as demais empresas instaladas na rodovia. No entorno imediato há escolas, mercados, farmácias e postos de combustível.',
+      },
+      {
+        pergunta: 'Quando o Verah será lançado?',
+        resposta:
+          'O empreendimento está em fase de pré-lançamento e a data oficial ainda não foi divulgada pela Marcondes Cesar. Quem se cadastra na lista de interesse recebe em primeira mão a data prevista, as plantas completas, os valores e as condições de pré-lançamento — normalmente as melhores condições de toda a comercialização, porque valem enquanto o estoque está inteiro.',
+      },
+      {
+        pergunta: 'Quais são as plantas e as metragens do Verah?',
+        resposta:
+          'Serão quatro tipologias, de 52 m², 54,70 m², 56 m² e 70 m², em opções de dois e três dormitórios. Todas as plantas têm varanda, sem exceção. As de três dormitórios, com 70 m², podem ter uma ou duas vagas de garagem; as demais tipologias têm uma vaga. As plantas detalhadas serão divulgadas no lançamento e vão primeiro para quem está na lista.',
+      },
+      {
+        pergunta: 'Quantas torres tem o Verah?',
+        resposta:
+          'Uma só. O Verah é um empreendimento de torre única, com dois elevadores. A escolha por torre única muda a convivência: o número de unidades permite que os moradores se conheçam, em vez da vizinhança vertical anônima de condomínios com várias torres. O projeto também prevê dimensionamento para instalar cobertura nas vagas de garagem, caso o condomínio decida fazer isso no futuro.',
+      },
+      {
+        pergunta: 'O que tem na área de lazer do Verah?',
+        resposta:
+          'A área de lazer reúne piscina adulta e infantil, quadra de beach sports, espaço pet, coworking, espaço influencer com tratamento acústico, academia de 62,45 m² com área de musculação e alongamento, salão de festas de 93,14 m² setorizado para eventos variados, espaço gourmet dividido em duas áreas, espaço kids, salão de jogos com tratamento acústico, sala de estética e spa, lavanderia compartilhada, mercadinho e pátio externo.',
+      },
+      {
+        pergunta: 'Dá para usar o FGTS na compra?',
+        resposta:
+          'Sim. O Verah prevê condições exclusivas de financiamento com uso do FGTS. As regras específicas, o percentual de entrada e as parcelas durante a obra são apresentados no lançamento, e variam conforme o perfil de cada comprador e a análise de crédito. A equipe de vendas faz essa simulação de forma individual para quem está na lista de interesse.',
+      },
+      {
+        pergunta: 'Como funciona a personalização do apartamento?',
+        resposta:
+          'O Verah terá uma linha exclusiva de personalização, para o comprador escolher acabamentos e composições antes da entrega — como quem constrói uma casa, mas sem conviver com a obra. A escolha acontece dentro de um prazo definido no cronograma da construtora; depois dele o apartamento segue o padrão do projeto. Quem entra cedo na lista tem mais margem para personalizar.',
+      },
+      {
+        pergunta: 'O Verah tem vista para a Serra da Mantiqueira?',
+        resposta:
+          'Sim, e esse é um dos diferenciais do endereço. A posição do terreno e a altura da torre abrem a vista para a Serra da Mantiqueira, algo que poucos endereços de Caçapava conseguem oferecer. A orientação exata de cada unidade em relação à serra é detalhada na apresentação das plantas, no lançamento.',
+      },
+      {
+        pergunta: 'Quem é a construtora do Verah?',
+        resposta:
+          'A Marcondes Cesar, construtora com 45 anos de história no Vale do Paraíba. São mais de 400 mil metros quadrados construídos, mais de 75 empreendimentos entregues e mais de 12.400 clientes atendidos ao longo desse período. O Verah é o empreendimento em que a construtora está desenvolvendo tecnologia para tornar o condomínio mais eficiente no financeiro, na logística e na construção de comunidade entre os moradores.',
+      },
+      {
+        pergunta: 'Vale a pena comprar ainda no pré-lançamento?',
+        resposta:
+          'É a fase em que o comprador encontra o estoque completo, e portanto a maior liberdade de escolha de andar, posição e tipologia. As condições comerciais de pré-lançamento também costumam ser as mais vantajosas de toda a comercialização. Em contrapartida, é a fase de maior prazo até a entrega. O cadastro na lista não gera compromisso: serve para receber as informações antes da divulgação pública.',
+      },
+      {
+        pergunta: 'Quais são os diferenciais de estrutura do Verah?',
+        resposta:
+          'A torre tem dois elevadores, o que reduz a espera nos horários de pico e melhora a circulação dos moradores. Todas as tipologias têm varanda, sem exceção — inclusive as menores. As unidades de três dormitórios podem ter uma ou duas vagas de garagem, conforme a planta escolhida, e as demais têm uma vaga. O projeto já nasce dimensionado para receber cobertura nas vagas, caso o condomínio decida instalar no futuro, sem obra estrutural depois.',
+      },
+      {
+        pergunta: 'O que existe perto do Verah, em Caçapava?',
+        resposta:
+          'O bairro Vera Cruz é uma região consolidada, com escolas, mercados, farmácias e postos de combustível no entorno imediato — o dia a dia se resolve a pé ou com poucos minutos de carro. A Av. Brasil, principal avenida da cidade, fica a três minutos, e o centro de Caçapava a quatro. Para quem trabalha fora da cidade, o acesso à Via Dutra encurta o trajeto até a Nestlé e as demais empresas instaladas ao longo da rodovia.',
+      },
+      {
+        pergunta: 'Como entro na lista de interesse do Verah?',
+        resposta:
+          'Basta preencher o formulário desta página com nome, WhatsApp e e-mail. O contato é feito por um especialista da iCasa Imóveis, que responde as dúvidas e envia o material completo assim que ele é liberado pela construtora. Se você já fala com um corretor, pode indicar o nome dele no campo próprio do formulário para que o atendimento continue com a mesma pessoa.',
+      },
+    ] as Pergunta[],
   },
 
   contato: {

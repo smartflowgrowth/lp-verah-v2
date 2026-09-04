@@ -1,22 +1,79 @@
 import type { DadosLead } from './schema'
 
-export type ResultadoEnvio =
-  | { ok: true }
-  | { ok: false; motivo: string }
+export type ResultadoEnvio = { ok: true } | { ok: false; motivo: string }
 
 /**
- * Única interface de envio de lead da aplicação.
- *
- * Nesta rodada é um stub: a validação interna não deve sujar o CRM.
- * Na publicação, o corpo desta função vira o fetch para a Edge Function
- * `lead-lp` com `origem: 'lp-verah'` — e nenhum componente muda.
+ * A LP não fala com o banco. Ela chama a Edge Function `lead-lp`, que grava
+ * em `clientes` com service_role. A chave abaixo é publicável e só autoriza a
+ * chamada da função — não dá acesso a nenhuma tabela.
  */
-export async function submitLead(dados: DadosLead): Promise<ResultadoEnvio> {
-  if (process.env.NODE_ENV !== 'production') {
-    console.info('[verah] lead capturado (stub, não enviado):', dados)
+const SUPABASE = {
+  url: 'https://yxzruvarveymsjghictn.supabase.co',
+  publishableKey: 'sb_publishable_5gEm99MnntJg9nLzn0nXZw_-jeH5Ga2',
+  funcao: 'lead-lp',
+} as const
+
+/** O slug vira `origem: 'lp-verah'` do lado da função. */
+const EMPREENDIMENTO = 'verah'
+
+/** Perder o registro é ruim; perder a conversa é pior. */
+const TIMEOUT_MS = 4000
+
+function capturarUtms(): Record<string, string> {
+  if (typeof window === 'undefined') return {}
+  const p = new URLSearchParams(window.location.search)
+  const utms: Record<string, string> = {}
+  for (const chave of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) {
+    const v = p.get(chave)
+    if (v) utms[chave] = v.slice(0, 200)
   }
-  await new Promise((r) => setTimeout(r, 600))
-  return { ok: true }
+  return utms
+}
+
+export async function submitLead(dados: DadosLead): Promise<ResultadoEnvio> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+
+  try {
+    const resp = await fetch(`${SUPABASE.url}/functions/v1/${SUPABASE.funcao}`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        apikey: SUPABASE.publishableKey,
+        Authorization: `Bearer ${SUPABASE.publishableKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nome: dados.nome,
+        telefone: dados.telefone,
+        email: dados.email || null,
+        empreendimento: EMPREENDIMENTO,
+        // Cabe na qualificação: o corretor indicado e o interesse declarado.
+        qualificacao: [
+          `Interesse: ${dados.interesse}`,
+          dados.plantaInteresse ? `Planta: ${dados.plantaInteresse}` : null,
+          dados.corretor ? `Corretor indicado: ${dados.corretor}` : null,
+        ]
+          .filter(Boolean)
+          .join(' | '),
+        pagina: typeof window !== 'undefined' ? window.location.href.slice(0, 500) : '',
+        empresa: dados.empresa || '', // honeypot, validado no servidor
+        ...capturarUtms(),
+      }),
+    })
+
+    if (!resp.ok) {
+      const texto = await resp.text().catch(() => '')
+      console.error('[verah] lead-lp recusou o lead:', resp.status, texto)
+      return { ok: false, motivo: 'Não conseguimos registrar agora. Tente pelo WhatsApp.' }
+    }
+    return { ok: true }
+  } catch (e) {
+    console.error('[verah] falha ao enviar o lead:', e)
+    return { ok: false, motivo: 'Não conseguimos registrar agora. Tente pelo WhatsApp.' }
+  } finally {
+    clearTimeout(timer)
+  }
 }
 
 /** Fallback: a conversa vale mais que o registro. */

@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'motion/react'
 import { Block } from '../Block'
 import { verah } from '@/content/verah'
@@ -40,13 +39,23 @@ export function Quintal() {
         <div className="mt-16 flex flex-col gap-12">
           {lazer.imagens.map((img) => (
             <figure key={img.src}>
-              <Image
-                src={img.src}
+              {/*
+                (obrigatorio no export estatico) o componente do Next nao
+                emite srcset, e a regra do projeto exige srcset em toda
+                imagem de conteudo. O `sizes` descreve a largura REAL de
+                renderizacao - 64rem e o max-w-5xl do container, nao 100vw.
+                O prefixo /verah e manual: o basePath do Next nao alcanca
+                atributos de uma tag nativa.
+              */}
+              <img
+                src={`/verah${img.src}`}
+                srcSet={`/verah${img.src.replace('.jpg', '-640.jpg')} 640w, /verah${img.src} ${img.largura}w`}
+                sizes="(min-width: 1024px) 64rem, 100vw"
                 alt={img.alt}
                 width={img.largura}
                 height={img.altura}
                 loading="lazy"
-                sizes="(min-width: 1024px) 64rem, 100vw"
+                decoding="async"
                 className="w-full rounded-xl"
               />
               <figcaption className="mt-3 text-[11px] uppercase tracking-[0.18em] opacity-50">

@@ -67,12 +67,18 @@ export function Vista() {
           <p className="mb-6 text-[11px] uppercase tracking-[0.42em] opacity-60">
             {verah.marca.selo}
           </p>
+          {/* O nome do empreendimento vem primeiro e a manchete depois,
+              dentro do mesmo h1 — é a regra do projeto, e é o que põe o
+              termo-alvo no h1 sem apagar a marca. */}
           <h1 className="font-display text-[clamp(3.5rem,16vw,11rem)] leading-[0.85] tracking-[0.06em]">
             {verah.marca.nome}
+            <span className="mt-5 block text-[11px] font-body uppercase tracking-[0.34em] opacity-70">
+              {verah.marca.tagline}
+            </span>
+            <span className="mt-3 block font-body text-[13px] font-light tracking-wide opacity-70 sm:text-sm">
+              {verah.seo.tituloH1}
+            </span>
           </h1>
-          <p className="mt-5 text-[11px] uppercase tracking-[0.34em] opacity-70">
-            {verah.marca.tagline}
-          </p>
         </div>
 
         <p className="relative z-10 mt-8 max-w-xl text-center font-display text-xl leading-relaxed opacity-80 sm:text-2xl md:mt-12">

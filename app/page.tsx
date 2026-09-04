@@ -10,6 +10,7 @@ import { Quintal } from '@/components/session/blocks/Quintal'
 import { Personalizacao } from '@/components/session/blocks/Personalizacao'
 import { Construtora } from '@/components/session/blocks/Construtora'
 import { Fila } from '@/components/session/blocks/Fila'
+import { Duvidas } from '@/components/session/blocks/Duvidas'
 
 export default function Page() {
   return (
@@ -24,6 +25,7 @@ export default function Page() {
         <Personalizacao />
         <Construtora />
         <Fila />
+        <Duvidas />
       </main>
       <StickyCta />
       <LeadDrawer />
