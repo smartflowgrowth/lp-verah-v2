@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Block } from '../Block'
 import { verah } from '@/content/verah'
 import { useSessionMotion } from '@/lib/scroll/useSessionMotion'
+import { CtaPrincipal } from '../CtaPrincipal'
 
 export function Vista() {
   const raiz = useRef<HTMLDivElement>(null)
@@ -66,6 +67,12 @@ export function Vista() {
         <p className="relative z-10 mt-12 max-w-xl text-center font-display text-xl leading-relaxed opacity-80 sm:text-2xl">
           {verah.vista.titulo}
         </p>
+
+        {/* No herói o CTA vive no fluxo, centralizado sob a frase. A partir
+            da segunda sessão quem assume é o StickyCta, no canto. */}
+        <div className="relative z-10 mt-10">
+          <CtaPrincipal />
+        </div>
 
         <div
           data-serra
