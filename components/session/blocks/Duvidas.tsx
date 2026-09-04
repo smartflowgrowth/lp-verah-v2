@@ -7,12 +7,16 @@ import { useSessionMotion } from '@/lib/scroll/useSessionMotion'
 import { escalonar, filhoEscalonado } from '@/lib/motion/presets'
 
 /**
- * As perguntas são `h2`, não `h3`, de propósito: a regra de SEO do projeto
- * pede pelo menos três `h2` com o termo-alvo, e forçá-lo nas manchetes de
- * venda estragaria a copy. Aqui ele aparece por conta própria, porque é
- * assim que as pessoas perguntam.
+ * `details`/`summary` nativos, e não um acordeão em JavaScript: a resposta
+ * continua no HTML servido mesmo fechada. Disso dependem duas coisas — as
+ * 1.263 palavras que a build do lps-icasa exige, e a validade do JSON-LD
+ * FAQPage, que só vale com as respostas presentes na página. De quebra,
+ * abre e fecha sem JavaScript nenhum e já vem acessível por teclado.
  *
- * Este é também o bloco que leva o HTML servido acima das 1.000 palavras.
+ * As perguntas são `h2` de propósito: a regra de SEO do projeto pede ao
+ * menos três `h2` com o termo-alvo, e forçá-lo nas manchetes de venda
+ * estragaria a copy. Aqui ele aparece por conta própria, porque é assim
+ * que as pessoas perguntam.
  */
 export function Duvidas() {
   const modo = useSessionMotion()
@@ -35,15 +39,24 @@ export function Duvidas() {
           className="mt-14 flex flex-col"
         >
           {duvidas.perguntas.map((item) => (
-            <motion.article
-              key={item.pergunta}
-              custom={modo}
-              variants={filhoEscalonado}
-              className="border-t border-cocoa/15 py-7"
-            >
-              <h2 className="font-display text-lg leading-snug sm:text-xl">{item.pergunta}</h2>
-              <p className="mt-3 text-sm leading-relaxed opacity-75">{item.resposta}</p>
-            </motion.article>
+            <motion.div key={item.pergunta} custom={modo} variants={filhoEscalonado}>
+              <details className="group border-t border-cocoa/15 last:border-b">
+                <summary
+                  className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 transition-colors hover:text-brick focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold [&::-webkit-details-marker]:hidden"
+                >
+                  <h2 className="font-display text-lg leading-snug sm:text-xl">{item.pergunta}</h2>
+                  {/* Cruz que vira menos: dois traços, um deles gira. */}
+                  <span
+                    aria-hidden="true"
+                    className="relative mt-2 block size-3 shrink-0 text-brick"
+                  >
+                    <span className="absolute top-1/2 left-0 h-px w-3 -translate-y-1/2 bg-current" />
+                    <span className="absolute top-1/2 left-0 h-px w-3 -translate-y-1/2 rotate-90 bg-current transition-transform duration-300 group-open:rotate-0 motion-reduce:transition-none" />
+                  </span>
+                </summary>
+                <p className="pb-6 pr-9 text-sm leading-relaxed opacity-75">{item.resposta}</p>
+              </details>
+            </motion.div>
           ))}
         </motion.div>
       </div>
