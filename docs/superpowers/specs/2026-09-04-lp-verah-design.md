@@ -95,7 +95,7 @@ Ritmo: 1 respirável → 2 médio → 3 respirável → 4 denso → 5 médio →
 
 ## 4. Arquitetura
 
-Next.js 15 (App Router, `output: 'export'`), TypeScript, Tailwind v4,
+Next.js 16 (App Router, `output: 'export'`), TypeScript, Tailwind v4,
 shadcn/ui, Motion, GSAP + ScrollTrigger.
 
 ```
