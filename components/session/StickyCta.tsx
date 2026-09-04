@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { useSessionMotion } from '@/lib/scroll/useSessionMotion'
 import { useSessao } from './SessionProvider'
 import { CtaPrincipal } from './CtaPrincipal'
@@ -18,7 +18,17 @@ export function StickyCta() {
   const modo = useSessionMotion()
   const [pulsar, setPulsar] = useState(false)
 
-  const oculto = blocoAtivo === 'vista' || blocoAtivo === 'fila' || drawerAberto
+  // Entra pelo mesmo gatilho que apaga o CTA do herói (200 px de scroll), com
+  // uma folga para os dois se cruzarem em vez de deixar um vão.
+  //
+  // Amarrar ao bloco ativo não servia: no celular o herói continua sendo o
+  // bloco ativo bem depois de o seu botão ter sumido, e a tela ficava sem
+  // nenhum CTA — o ponto de contato é para estar sempre presente.
+  const { scrollY } = useScroll()
+  const [passouHeroi, setPassouHeroi] = useState(false)
+  useMotionValueEvent(scrollY, 'change', (v) => setPassouHeroi(v > 160))
+
+  const oculto = !passouHeroi || blocoAtivo === 'fila' || drawerAberto
 
   // Pulso discreto a cada 45 s, e só com o usuário parado.
   useEffect(() => {

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'motion/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Block } from '../Block'
@@ -11,6 +12,16 @@ import { CtaPrincipal } from '../CtaPrincipal'
 export function Vista() {
   const raiz = useRef<HTMLDivElement>(null)
   const modo = useSessionMotion()
+
+  // O CTA do herói apaga nos primeiros 200 px de scroll, bem antes de o
+  // conteúdo alcançar a borda de cima — sem isso ele sobe junto e atravessa
+  // o topo da tela cortado pela metade, no caminho até o CTA do canto
+  // assumir.
+  //
+  // Medido em pixels do documento, e não com `useScroll({ target })`: com
+  // alvo, a MotionValue ficava presa em 1 e o botão nunca apagava.
+  const { scrollY } = useScroll()
+  const opacidadeCta = useTransform(scrollY, [0, 200], [1, 0])
 
   useEffect(() => {
     if (!modo.anima || !raiz.current) return
@@ -69,10 +80,15 @@ export function Vista() {
         </p>
 
         {/* No herói o CTA vive no fluxo, centralizado sob a frase. A partir
-            da segunda sessão quem assume é o StickyCta, no canto. */}
-        <div className="relative z-10 mt-10">
+            da segunda sessão quem assume é o StickyCta, no canto.
+            Ele sai de cena junto com o herói: deixá-lo apenas rolar fazia um
+            botão cortado pela metade atravessar o topo da tela no caminho. */}
+        <motion.div
+          className="relative z-10 mt-10"
+          style={modo.anima ? { opacity: opacidadeCta } : undefined}
+        >
           <CtaPrincipal />
-        </div>
+        </motion.div>
 
         <div
           data-serra
