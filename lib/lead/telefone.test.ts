@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { normalizarTelefone, formatarTelefone } from './telefone'
+import { verah } from '@/content/verah'
 
 describe('normalizarTelefone', () => {
   it('remove máscara e código do país', () => {
@@ -36,5 +37,20 @@ describe('formatarTelefone', () => {
   it('formata parcialmente durante a digitação', () => {
     expect(formatarTelefone('12')).toBe('(12')
     expect(formatarTelefone('129')).toBe('(12) 9')
+  })
+})
+
+/**
+ * O campo de telefone usa como exemplo o próprio número que atende o
+ * empreendimento. Este teste existe porque as duas coisas já divergiram: o
+ * placeholder ficou meses com o número da construtora depois que o contato
+ * passou a ser o do corretor. Derivar um do outro resolve, e o teste
+ * garante que a derivação continua válida se o número mudar.
+ */
+describe('placeholder do campo de telefone', () => {
+  it('é o número de contato do empreendimento, formatado', () => {
+    const placeholder = formatarTelefone(verah.contato.whatsapp)
+    expect(normalizarTelefone(placeholder)).toBe(normalizarTelefone(verah.contato.whatsapp))
+    expect(placeholder).toMatch(/^\(\d{2}\) \d{4,5}-\d{4}$/)
   })
 })

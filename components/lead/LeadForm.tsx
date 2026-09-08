@@ -125,7 +125,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
           type="tel"
           inputMode="numeric"
           autoComplete="tel"
-          placeholder="(12) 98189-3999"
+          placeholder={formatarTelefone(verah.contato.whatsapp)}
           className={campo}
           {...register('telefone', {
             onChange: (e) => setValue('telefone', formatarTelefone(e.target.value)),
