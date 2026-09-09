@@ -332,7 +332,7 @@ export const verah = {
     /* Corretor da iCasa que atende o Verah — o mesmo da LP do Parque Una.
        Não é o número da Marcondes Cesar: quem atende o lead é a
        imobiliária, não a construtora. */
-    whatsapp: '5512981267171',
+    whatsapp: '5512981885875',
     mensagemWhatsapp:
       'Olá! Vim da página do VERAH e quero saber mais sobre o pré-lançamento.',
   },
