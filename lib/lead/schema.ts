@@ -9,18 +9,13 @@ export const ROTULO_INTERESSE: Record<(typeof INTERESSES)[number], string> = {
   corretor: 'Sou corretor',
 }
 
-/**
- * Renda familiar mensal, em três faixas pensadas para o Verah: 2 e 3
- * dormitórios de 52 a 70 m² em Caçapava, com financiamento e FGTS. O corte
- * de R$ 12 mil acompanha o teto do Minha Casa Minha Vida; abaixo de R$ 6 mil
- * o cliente costuma depender de subsídio e de um prazo mais longo.
- */
-export const RENDAS = ['ate-6', '6-a-12', 'acima-12'] as const
+/** Renda familiar mensal, nas três faixas definidas pela equipe comercial. */
+export const RENDAS = ['5-a-10', '10-a-15', 'acima-15'] as const
 
 export const ROTULO_RENDA: Record<(typeof RENDAS)[number], string> = {
-  'ate-6': 'Até R$ 6 mil',
-  '6-a-12': 'R$ 6 a 12 mil',
-  'acima-12': 'Acima de R$ 12 mil',
+  '5-a-10': 'R$ 5 a R$ 10 mil',
+  '10-a-15': 'R$ 10 a R$ 15 mil',
+  'acima-15': 'Acima de R$ 15 mil',
 }
 
 export const esquemaLead = z.object({
@@ -47,10 +42,9 @@ export const esquemaLead = z.object({
 
   renda: z.enum(RENDAS, { message: 'Escolha uma faixa.' }),
 
-  /* `nullish`, e não `optional`: um grupo de rádio sem nenhuma opção marcada
-     chega do react-hook-form como `null`. Com `optional` o envio era barrado
-     sem mensagem nenhuma — o erro caía num campo que não tem onde aparecer. */
-  plantaInteresse: z.string().nullish(),
+  /* Obrigatória. Um grupo de rádio sem opção marcada chega do
+     react-hook-form como `null`; a mensagem cobre esse caso também. */
+  plantaInteresse: z.string({ message: 'Escolha uma planta.' }).min(1, 'Escolha uma planta.'),
 
   /** Opcional: quem preencher veio por indicação de um corretor. */
   corretor: z.string().trim().max(80, 'Nome muito longo.').optional(),

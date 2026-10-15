@@ -28,23 +28,43 @@ describe('formulário de lead', () => {
   it('não envia sem a faixa de renda', async () => {
     render(<LeadForm />)
     preencherObrigatorios()
+    fireEvent.click(screen.getByLabelText('A · 70 m²'))
     fireEvent.submit(screen.getByRole('button', { name: /Entrar na lista/ }).closest('form')!)
     expect(await screen.findByText('Escolha uma faixa.')).toBeInTheDocument()
     expect(submitLead).not.toHaveBeenCalled()
   })
 
-  // Planta fica em branco de propósito: é o caso de quem chega pelo botão
-  // fixo, e era exatamente o que travava o envio sem aviso.
-  it('envia a faixa de renda escolhida, mesmo sem planta', async () => {
+  // Planta em branco é o caso de quem chega pelo botão fixo: precisa avisar,
+  // e não travar calado como acontecia quando o campo era opcional.
+  it('não envia sem planta e mostra o aviso', async () => {
     render(<LeadForm />)
     preencherObrigatorios()
-    fireEvent.click(screen.getByLabelText('R$ 6 a 12 mil'))
+    fireEvent.click(screen.getByLabelText('R$ 10 a R$ 15 mil'))
+    fireEvent.submit(screen.getByRole('button', { name: /Entrar na lista/ }).closest('form')!)
+    expect(await screen.findByText('Escolha uma planta.')).toBeInTheDocument()
+    expect(submitLead).not.toHaveBeenCalled()
+  })
+
+  it('envia com renda e planta escolhidas', async () => {
+    render(<LeadForm />)
+    preencherObrigatorios()
+    fireEvent.click(screen.getByLabelText('R$ 10 a R$ 15 mil'))
+    fireEvent.click(screen.getByLabelText('A · 70 m²'))
     fireEvent.submit(screen.getByRole('button', { name: /Entrar na lista/ }).closest('form')!)
     await waitFor(() => expect(submitLead).toHaveBeenCalledTimes(1))
     expect(vi.mocked(submitLead).mock.calls[0][0]).toMatchObject({
-      renda: '6-a-12',
+      renda: '10-a-15',
+      plantaInteresse: 'Tipo A · 70 m²',
       interesse: 'morador',
-      telefone: '12981885875',
     })
+  })
+
+  it('aceita a planta que já chega marcada pelo card', async () => {
+    render(<LeadForm plantaInteresse="Tipo B · 52 m²" />)
+    preencherObrigatorios()
+    fireEvent.click(screen.getByLabelText('Acima de R$ 15 mil'))
+    fireEvent.submit(screen.getByRole('button', { name: /Entrar na lista/ }).closest('form')!)
+    await waitFor(() => expect(submitLead).toHaveBeenCalledTimes(1))
+    expect(vi.mocked(submitLead).mock.calls[0][0].plantaInteresse).toBe('Tipo B · 52 m²')
   })
 })

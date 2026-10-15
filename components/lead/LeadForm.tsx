@@ -44,6 +44,9 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
   const chip = `flex-1 cursor-pointer whitespace-nowrap rounded-full border border-cocoa/20 px-2 text-center text-xs transition-colors has-[:checked]:border-gold has-[:checked]:bg-gold/20 sm:flex-none sm:px-4 sm:text-sm ${
     teclado.aberto ? 'py-1.5' : 'py-2'
   }`
+  /* As faixas de renda são longas demais para três chips numa linha de
+     celular: em vez de transbordar, o texto quebra dentro do chip. */
+  const chipRenda = `${chip.replace('whitespace-nowrap', 'leading-tight')} min-w-0 sm:whitespace-nowrap`
   const legenda = `text-xs uppercase tracking-[0.14em] opacity-70 ${
     teclado.aberto ? 'mb-1' : 'mb-1.5 sm:mb-2'
   }`
@@ -171,18 +174,20 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
         {errors.interesse && <p className="mt-1 text-xs text-brick">{errors.interesse.message}</p>}
       </fieldset>
 
-      <fieldset>
+      <fieldset className="min-w-0">
         <legend className={legenda}>
           Renda familiar mensal
         </legend>
-        <div className="flex flex-nowrap gap-1.5 sm:flex-wrap sm:gap-2">
+        <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:gap-2">
           {RENDAS.map((valor) => (
             <label
               key={valor}
-              className={chip}
+              className={chipRenda}
             >
               <input type="radio" value={valor} className="sr-only" {...register('renda')} />
-              {ROTULO_RENDA[valor]}
+              {/* Espaços inseparáveis em "R$ 10 mil": se o chip quebrar, quebra
+                  entre as partes, nunca no meio do valor. */}
+              {ROTULO_RENDA[valor].replace(/R\$ (\d+) mil/g, 'R$\u00a0$1\u00a0mil').replace(/R\$ (\d+)/g, 'R$\u00a0$1')}
             </label>
           ))}
         </div>
@@ -191,7 +196,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
 
       <fieldset>
         <legend className={legenda}>
-          Planta de interesse <span className="normal-case opacity-60">(opcional)</span>
+          Planta de interesse
         </legend>
         {/* Chega marcada quando a pessoa veio do CTA de um card de planta;
             em branco quando veio do botão fixo ou do formulário do fim. */}
@@ -211,6 +216,9 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
             </label>
           ))}
         </div>
+        {errors.plantaInteresse && (
+          <p className="mt-1 text-xs text-brick">{errors.plantaInteresse.message}</p>
+        )}
       </fieldset>
 
       <div>

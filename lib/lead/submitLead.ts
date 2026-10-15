@@ -60,7 +60,7 @@ export async function submitLead(dados: DadosLead): Promise<ResultadoEnvio> {
         qualificacao: [
           `Interesse: ${dados.interesse}`,
           `Renda familiar: ${ROTULO_RENDA[dados.renda]}`,
-          dados.plantaInteresse ? `Planta: ${dados.plantaInteresse}` : null,
+          `Planta: ${dados.plantaInteresse}`,
           dados.corretor ? `Corretor indicado: ${dados.corretor}` : null,
         ]
           .filter(Boolean)

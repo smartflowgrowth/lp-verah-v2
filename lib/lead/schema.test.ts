@@ -6,7 +6,8 @@ const valido = {
   telefone: '+55 (12) 98189-3999',
   email: 'matheus@exemplo.com.br',
   interesse: 'morador' as const,
-  renda: '6-a-12' as const,
+  renda: '10-a-15' as const,
+  plantaInteresse: 'Tipo A · 70 m²',
   empresa: '',
 }
 
@@ -67,11 +68,12 @@ describe('esquemaLead', () => {
     expect(r.success).toBe(false)
   })
 
-  it('aceita planta em branco, como o rádio sem seleção a entrega', () => {
-    expect(esquemaLead.safeParse({ ...valido, plantaInteresse: null }).success).toBe(true)
+  it('exige a planta, inclusive quando o rádio chega vazio (null)', () => {
+    expect(esquemaLead.safeParse({ ...valido, plantaInteresse: null }).success).toBe(false)
+    expect(esquemaLead.safeParse({ ...valido, plantaInteresse: undefined }).success).toBe(false)
   })
 
-  it('aceita plantaInteresse opcional', () => {
+  it('guarda a planta escolhida', () => {
     const r = esquemaLead.safeParse({ ...valido, plantaInteresse: '70 m²' })
     expect(r.success).toBe(true)
     if (r.success) expect(r.data.plantaInteresse).toBe('70 m²')
