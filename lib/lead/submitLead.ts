@@ -1,4 +1,4 @@
-import type { DadosLead } from './schema'
+import { ROTULO_RENDA, type DadosLead } from './schema'
 import { PREVIA } from '@/lib/asset'
 
 export type ResultadoEnvio = { ok: true } | { ok: false; motivo: string }
@@ -59,6 +59,7 @@ export async function submitLead(dados: DadosLead): Promise<ResultadoEnvio> {
         // Cabe na qualificação: o corretor indicado e o interesse declarado.
         qualificacao: [
           `Interesse: ${dados.interesse}`,
+          `Renda familiar: ${ROTULO_RENDA[dados.renda]}`,
           dados.plantaInteresse ? `Planta: ${dados.plantaInteresse}` : null,
           dados.corretor ? `Corretor indicado: ${dados.corretor}` : null,
         ]

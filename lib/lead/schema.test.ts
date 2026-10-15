@@ -6,6 +6,7 @@ const valido = {
   telefone: '+55 (12) 98189-3999',
   email: 'matheus@exemplo.com.br',
   interesse: 'morador' as const,
+  renda: '6-a-12' as const,
   empresa: '',
 }
 
@@ -38,6 +39,11 @@ describe('esquemaLead', () => {
     expect(r.success).toBe(false)
   })
 
+  it('exige a faixa de renda', () => {
+    expect(esquemaLead.safeParse({ ...valido, renda: undefined }).success).toBe(false)
+    expect(esquemaLead.safeParse({ ...valido, renda: 'outra' }).success).toBe(false)
+  })
+
   it('recusa interesse fora da lista', () => {
     const r = esquemaLead.safeParse({ ...valido, interesse: 'curioso' })
     expect(r.success).toBe(false)
@@ -59,6 +65,10 @@ describe('esquemaLead', () => {
   it('recusa nome de corretor absurdamente longo', () => {
     const r = esquemaLead.safeParse({ ...valido, corretor: 'x'.repeat(81) })
     expect(r.success).toBe(false)
+  })
+
+  it('aceita planta em branco, como o rádio sem seleção a entrega', () => {
+    expect(esquemaLead.safeParse({ ...valido, plantaInteresse: null }).success).toBe(true)
   })
 
   it('aceita plantaInteresse opcional', () => {

@@ -7,6 +7,8 @@ import {
   esquemaLead,
   INTERESSES,
   ROTULO_INTERESSE,
+  RENDAS,
+  ROTULO_RENDA,
   type DadosLead,
   type EntradaLead,
 } from '@/lib/lead/schema'
@@ -66,6 +68,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
     if (r.ok) {
       track('form_enviou', {
         interesse: dados.interesse,
+        renda: dados.renda,
         plantaInteresse: dados.plantaInteresse ?? null,
         temCorretor: Boolean(dados.corretor),
       })
@@ -166,6 +169,24 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
           ))}
         </div>
         {errors.interesse && <p className="mt-1 text-xs text-brick">{errors.interesse.message}</p>}
+      </fieldset>
+
+      <fieldset>
+        <legend className={legenda}>
+          Renda familiar mensal
+        </legend>
+        <div className="flex flex-nowrap gap-1.5 sm:flex-wrap sm:gap-2">
+          {RENDAS.map((valor) => (
+            <label
+              key={valor}
+              className={chip}
+            >
+              <input type="radio" value={valor} className="sr-only" {...register('renda')} />
+              {ROTULO_RENDA[valor]}
+            </label>
+          ))}
+        </div>
+        {errors.renda && <p className="mt-1 text-xs text-brick">{errors.renda.message}</p>}
       </fieldset>
 
       <fieldset>
