@@ -192,6 +192,9 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
           ))}
         </div>
         {errors.renda && <p className="mt-1 text-xs text-brick">{errors.renda.message}</p>}
+        <p className="mt-1.5 text-[11px] leading-snug opacity-60">
+          Você pode compor renda familiar com até 5 pessoas da família.
+        </p>
       </fieldset>
 
       <fieldset>
