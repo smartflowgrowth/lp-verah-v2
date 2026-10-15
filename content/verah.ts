@@ -22,7 +22,7 @@ export const BLOCOS: readonly Bloco[] = [
   { id: 'torre', rotulo: 'A torre', ritmo: 'respiravel' },
   { id: 'plantas', rotulo: 'As plantas', ritmo: 'denso' },
   { id: 'quintal', rotulo: 'O quintal', ritmo: 'medio' },
-  { id: 'personalizacao', rotulo: 'Seu jeito', ritmo: 'medio' },
+  { id: 'personalizacao', rotulo: 'Por que agora', ritmo: 'medio' },
   { id: 'construtora', rotulo: '45 anos', ritmo: 'respiravel' },
   { id: 'fila', rotulo: 'A fila', ritmo: 'denso' },
   /* Longo, mas de leitura escaneável: quem chega aqui lê só a pergunta
@@ -33,11 +33,25 @@ export const BLOCOS: readonly Bloco[] = [
 
 export type Tipologia = {
   id: string
+  /** Letra do book de vendas. */
+  tipo: 'A' | 'B' | 'C' | 'D'
   area: number
   areaRotulo: string
+  /** O que vai para o lead e para o seletor do formulário. */
+  rotulo: string
   dormitorios: 2 | 3
+  dormitoriosRotulo: string
   vagas: string
+  finais: number[]
+  comodos: string[]
   destaque: string
+  /** Sem planta, o card mostra "planta em breve". */
+  planta?: ImagemBook
+}
+
+export type ItemLazer = {
+  nome: string
+  nota?: string
 }
 
 export type Pergunta = {
@@ -57,7 +71,7 @@ export const verah = {
   marca: {
     nome: 'VERAH',
     tagline: 'lar à primeira vista',
-    selo: 'em breve',
+    selo: 'pré-lançamento',
   },
 
   vista: {
@@ -81,80 +95,158 @@ export const verah = {
       { nome: 'Via Dutra', minutos: 6, nota: 'acesso à Nestlé e às empresas da rodovia' },
     ],
     infraestrutura: 'Escolas, mercados, postos e farmácias no entorno imediato.',
+    aviso: 'Tempos aproximados de deslocamento.',
   },
 
   torre: {
     titulo: 'Uma torre. Nada de vizinhança vertical anônima.',
     apoio:
-      'Torre única, com o número de unidades que permite conhecer quem mora ao lado.',
+      'Torre única de 11 andares, com o número de unidades que permite conhecer quem mora ao lado.',
     fatos: [
+      { valor: '11', rotulo: 'andares' },
+      { valor: '10', rotulo: 'apartamentos por andar' },
       { valor: '2', rotulo: 'elevadores' },
       { valor: '100%', rotulo: 'das plantas com varanda' },
-      { valor: '2 e 3', rotulo: 'dormitórios' },
     ],
+    fachada: {
+      src: '/book/fachada.jpg',
+      alt: 'Perspectiva da fachada do Verah: torre única de 11 andares com varandas em madeira e a portaria com o nome Verah, na Av. Dr. José de Moura Resende, em Caçapava',
+      largura: 1200,
+      altura: 1433,
+      legenda: 'Perspectiva ilustrativa da fachada',
+    } as ImagemBook,
   },
 
+  /** Ordem crescente de metragem. Letras e finais conforme o book de vendas. */
   tipologias: [
     {
-      id: 't52',
+      id: 'tipo-b',
+      tipo: 'B',
       area: 52,
       areaRotulo: '52 m²',
+      rotulo: 'Tipo B · 52 m²',
       dormitorios: 2,
+      dormitoriosRotulo: '2 dorms, 1 suíte',
       vagas: '1 vaga',
+      finais: [3, 8],
+      comodos: [
+        '2 dormitórios, sendo 1 suíte',
+        'Sala de estar e jantar integrada',
+        'Cozinha com área de serviço',
+        'Varanda',
+        '1 vaga de garagem',
+      ],
       destaque: 'O compacto que não abre mão da varanda.',
+      planta: {
+        src: '/book/planta-b.jpg',
+        alt: 'Planta humanizada do Tipo B do Verah, 52 m²: dois dormitórios sendo uma suíte, sala de estar e jantar integrada, cozinha com área de serviço e varanda',
+        largura: 1600,
+        altura: 992,
+        legenda: 'Tipo B · 52 m²',
+      },
     },
     {
-      id: 't5470',
-      area: 54.7,
-      areaRotulo: '54,70 m²',
+      id: 'tipo-c',
+      tipo: 'C',
+      area: 54,
+      areaRotulo: '54 m²',
+      rotulo: 'Tipo C · 54 m²',
       dormitorios: 2,
+      dormitoriosRotulo: '2 dorms, 1 suíte',
       vagas: '1 vaga',
+      finais: [4, 9],
+      comodos: ['2 dormitórios, sendo 1 suíte', 'Varanda', '1 vaga de garagem'],
       destaque: 'Mais social, mesma pegada.',
     },
     {
-      id: 't56',
+      id: 'tipo-d',
+      tipo: 'D',
       area: 56,
       areaRotulo: '56 m²',
+      rotulo: 'Tipo D · 56 m²',
       dormitorios: 2,
+      dormitoriosRotulo: '2 dorms, 1 suíte',
       vagas: '1 vaga',
-      destaque: 'O equilíbrio entre estar e guardar.',
+      finais: [5, 10],
+      comodos: [
+        '2 dormitórios, sendo 1 suíte',
+        'Living integrado à cozinha',
+        'Bancada americana',
+        'Varanda',
+        '1 vaga de garagem',
+      ],
+      destaque: 'O equilíbrio entre estar e receber.',
+      planta: {
+        src: '/book/planta-d.jpg',
+        alt: 'Planta humanizada do Tipo D do Verah, 56 m²: dois dormitórios sendo uma suíte, living integrado à cozinha com bancada americana e varanda',
+        largura: 1600,
+        altura: 826,
+        legenda: 'Tipo D · 56 m²',
+      },
     },
     {
-      id: 't70',
+      id: 'tipo-a',
+      tipo: 'A',
       area: 70,
       areaRotulo: '70 m²',
+      rotulo: 'Tipo A · 70 m²',
       dormitorios: 3,
+      dormitoriosRotulo: '3 dorms com suíte',
       vagas: '1 ou 2 vagas',
+      finais: [1, 2, 6, 7],
+      comodos: [
+        '3 dormitórios com suíte',
+        'Living com jantar amplo',
+        'Cozinha integrada com bancada',
+        'Varanda',
+        '1 ou 2 vagas de garagem',
+      ],
       destaque: 'Três dormitórios sem apertar o convívio.',
+      planta: {
+        src: '/book/planta-a.jpg',
+        alt: 'Planta humanizada do Tipo A do Verah, 70 m²: três dormitórios com suíte, living com jantar amplo, cozinha integrada com bancada e varanda',
+        largura: 1600,
+        altura: 933,
+        legenda: 'Tipo A · 70 m²',
+      },
     },
   ] as Tipologia[],
 
   plantas: {
     titulo: 'Para cada fase da vida, uma dimensão.',
     apoio:
-      'Plantas flexíveis, pensadas para adaptarem-se ao seu cotidiano. As imagens definitivas serão divulgadas no lançamento.',
+      'Quatro tipologias de 2 e 3 dormitórios, todas com suíte e varanda. Cada final de unidade tem a sua planta.',
     ctaContextual: 'Quero esta planta',
+    emBreve: 'Planta em breve',
+    avisoMetragem:
+      'Metragens privativas aproximadas, sujeitas a confirmação no memorial descritivo e no registro da incorporação.',
+    avisoPlanta:
+      'Plantas humanizadas com sugestão de decoração. Móveis e objetos não fazem parte do contrato.',
   },
 
   lazer: {
     titulo: 'Seu quintal, seu resort.',
     apoio: 'Uma área de lazer que Caçapava nunca viveu.',
+    /* Só a lista, sem contagem: o book fala em "10 áreas de lazer" numa
+       página e lista 16 itens em outra. */
     itens: [
-      'Piscina adulta e infantil',
-      'Quadra de beach sports',
-      'Espaço pet',
-      'Coworking',
-      'Espaço influencer',
-      'Fitness de 62,45 m²',
-      'Salão de festas de 93,14 m²',
-      'Espaço gourmet',
-      'Espaço kids',
-      'Salão de jogos',
-      'Estética e spa',
-      'Lavanderia compartilhada',
-      'Mercadinho',
-      'Pátio externo',
-    ],
+      { nome: 'Piscina adulta e infantil' },
+      { nome: 'Quadra de beach sports' },
+      { nome: 'Espaço pet' },
+      { nome: 'Vestiário e banheiro' },
+      { nome: 'Espaço fitness', nota: '62,45 m², musculação e alongamento' },
+      { nome: 'Coworking', nota: 'afastado das áreas de maior ruído' },
+      { nome: 'Espaço influencer', nota: 'sala com tratamento de ruído' },
+      { nome: 'Espaço estética', nota: 'climatizado, com área de spa e massagem' },
+      { nome: 'Espaço gourmet', nota: 'em duas áreas, junto ao lazer externo' },
+      { nome: 'Espaço kids' },
+      { nome: 'Salão de festas', nota: '93,14 m², setorizado para eventos' },
+      { nome: 'Copa do salão de festas' },
+      { nome: 'Salão de jogos', nota: 'com tratamento acústico' },
+      { nome: 'Lavanderia compartilhada' },
+      { nome: 'Mercadinho' },
+      { nome: 'Pátio externo' },
+    ] as ItemLazer[],
     imagens: [
       {
         src: '/book/lazer-implantacao.jpg',
@@ -166,15 +258,15 @@ export const verah = {
       {
         src: '/book/lazer-externo.jpg',
         alt: 'Área externa do Verah com piscina adulta e infantil, quadra de beach sports e espaço pet identificados',
-        largura: 1220,
-        altura: 672,
+        largura: 1600,
+        altura: 881,
         legenda: 'Piscina, beach sports e espaço pet',
       },
       {
         src: '/book/lazer-interno.jpg',
         alt: 'Planta das áreas comuns internas do Verah com fitness, coworking, espaço gourmet, salão de festas e espaço kids identificados',
-        largura: 1220,
-        altura: 681,
+        largura: 1600,
+        altura: 893,
         legenda: 'Fitness, coworking, gourmet e salão de festas',
       },
       {
@@ -195,24 +287,28 @@ export const verah = {
   },
 
   personalizacao: {
-    titulo: 'Escolha cada detalhe. Sem obra, sem dor de cabeça.',
+    titulo: 'Por que garantir no pré-\u2060lançamento.',
     apoio:
-      'Linha exclusiva de personalização para você definir o seu lar como quem constrói uma casa — só que sem a obra.',
+      'Quem entra agora escolhe primeiro, personaliza com mais margem e encontra as melhores condições da comercialização.',
     pilares: [
       {
-        titulo: 'Personalização de casa',
+        titulo: 'Escolha antecipada',
         texto:
-          'Escolha acabamentos e composições antes da entrega, na linha exclusiva do Verah.',
+          'Acesso às melhores unidades, andares e finais antes da abertura geral de vendas.',
       },
       {
-        titulo: 'Inteligência financeira',
+        titulo: 'Personalização',
         texto:
-          'Condições exclusivas de financiamento, com uso do FGTS.',
+          'Linha exclusiva para escolher acabamentos e composições antes da entrega, sem conviver com a obra.',
+      },
+      {
+        titulo: 'Financiamento',
+        texto: 'Condições de financiamento com possibilidade de uso do FGTS.',
       },
       {
         titulo: 'Condomínio inteligente',
         texto:
-          'Tecnologia em desenvolvimento para tornar o condomínio mais eficiente no financeiro, na logística e na vida em comunidade.',
+          'Tecnologia própria, em desenvolvimento, pensada para eficiência e vida em comunidade.',
       },
     ],
     ctaContextual: 'Quero as condições',
@@ -233,9 +329,9 @@ export const verah = {
     encerramento: 'Você chegou ao fim da sessão.',
     titulo: 'Reserve seu lugar na fila de quem chegou antes.',
     apoio:
-      'Entre na lista exclusiva e seja um dos primeiros a receber condições de pré-lançamento, plantas, valores e a data prevista de lançamento.',
+      'Entre na lista de espera exclusiva e receba em primeira mão a tabela, as condições e o espelho de unidades do Verah.',
     aviso:
-      'Imagens e informações preliminares, sujeitas a alteração até o lançamento.',
+      'Imagens, perspectivas e plantas meramente ilustrativas. Móveis, objetos e itens decorativos não fazem parte do contrato. Metragens, tipologias, itens de lazer e especificações sujeitos a alteração até o registro da incorporação. Material de pré-lançamento, sem caráter de oferta.',
   },
 
   cta: {
@@ -251,7 +347,7 @@ export const verah = {
     termoAlvo: 'verah caçapava',
     url: 'https://lancamentos.icasaimob.com.br/verah/',
     ogImagem: 'https://lancamentos.icasaimob.com.br/verah/og-verah.jpg',
-    atualizadaEm: '2026-09-04',
+    atualizadaEm: '2026-10-15',
     tituloH1: 'Apartamentos de 2 e 3 dormitórios em Caçapava',
   },
 
@@ -268,22 +364,27 @@ export const verah = {
       {
         pergunta: 'Quando o Verah será lançado?',
         resposta:
-          'O empreendimento está em fase de pré-lançamento e a data oficial ainda não foi divulgada pela Marcondes Cesar. Quem se cadastra na lista de interesse recebe em primeira mão a data prevista, as plantas completas, os valores e as condições de pré-lançamento — normalmente as melhores condições de toda a comercialização, porque valem enquanto o estoque está inteiro.',
+          'O empreendimento está em fase de pré-lançamento e a data oficial ainda não foi divulgada pela Marcondes Cesar. Quem se cadastra na lista de interesse recebe em primeira mão a data prevista, a tabela de valores, o espelho de unidades e as condições de pré-lançamento — normalmente as melhores condições de toda a comercialização, porque valem enquanto o estoque está inteiro.',
       },
       {
         pergunta: 'Quais são as plantas e as metragens do Verah?',
         resposta:
-          'Serão quatro tipologias, de 52 m², 54,70 m², 56 m² e 70 m², em opções de dois e três dormitórios. Todas as plantas têm varanda, sem exceção. As de três dormitórios, com 70 m², podem ter uma ou duas vagas de garagem; as demais tipologias têm uma vaga. As plantas detalhadas serão divulgadas no lançamento e vão primeiro para quem está na lista.',
+          'São quatro tipologias, todas com suíte e varanda: Tipo B, com 52 m² e dois dormitórios; Tipo C, com 54 m² e dois dormitórios; Tipo D, com 56 m² e dois dormitórios; e Tipo A, com 70 m² e três dormitórios. O Tipo A pode ter uma ou duas vagas de garagem; os demais têm uma vaga. As plantas humanizadas dos tipos A, B e D já estão nesta página; a do Tipo C será divulgada em breve. As metragens são privativas e aproximadas, sujeitas a confirmação no memorial descritivo.',
+      },
+      {
+        pergunta: 'Qual planta fica em cada final de unidade?',
+        resposta:
+          'Cada andar tem dez apartamentos, e o final da unidade indica a planta. Os finais 1, 2, 6 e 7 são do Tipo A, de 70 m² e três dormitórios. Os finais 3 e 8 são do Tipo B, de 52 m². Os finais 4 e 9 são do Tipo C, de 54 m². E os finais 5 e 10 são do Tipo D, de 56 m². Quem entra na lista no pré-lançamento tem acesso antecipado ao espelho de unidades para escolher andar e final antes da abertura geral de vendas.',
       },
       {
         pergunta: 'Quantas torres tem o Verah?',
         resposta:
-          'Uma só. O Verah é um empreendimento de torre única, com dois elevadores. A escolha por torre única muda a convivência: o número de unidades permite que os moradores se conheçam, em vez da vizinhança vertical anônima de condomínios com várias torres. O projeto também prevê dimensionamento para instalar cobertura nas vagas de garagem, caso o condomínio decida fazer isso no futuro.',
+          'Uma só. O Verah é um empreendimento de torre única, com 11 andares, dez apartamentos por andar e dois elevadores. A escolha por torre única muda a convivência: o número de unidades permite que os moradores se conheçam, em vez da vizinhança vertical anônima de condomínios com várias torres. O projeto também prevê dimensionamento para instalar cobertura nas vagas de garagem, caso o condomínio decida fazer isso no futuro.',
       },
       {
         pergunta: 'O que tem na área de lazer do Verah?',
         resposta:
-          'A área de lazer reúne piscina adulta e infantil, quadra de beach sports, espaço pet, coworking, espaço influencer com tratamento acústico, academia de 62,45 m² com área de musculação e alongamento, salão de festas de 93,14 m² setorizado para eventos variados, espaço gourmet dividido em duas áreas, espaço kids, salão de jogos com tratamento acústico, sala de estética e spa, lavanderia compartilhada, mercadinho e pátio externo.',
+          'Na área externa, piscina adulta e infantil, quadra de beach sports, espaço pet e vestiário com banheiro. Na área interna, espaço fitness de 62,45 m² com musculação e alongamento, coworking afastado das áreas de maior ruído, espaço influencer com tratamento de ruído, espaço estética climatizado com área de spa e massagem, espaço gourmet em duas áreas junto ao lazer externo, espaço kids, salão de festas de 93,14 m² setorizado para eventos com copa própria, salão de jogos com tratamento acústico, lavanderia compartilhada, mercadinho e pátio externo.',
       },
       {
         pergunta: 'Dá para usar o FGTS na compra?',

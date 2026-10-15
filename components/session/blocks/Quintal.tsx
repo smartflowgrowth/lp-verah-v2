@@ -5,6 +5,7 @@ import { Block } from '../Block'
 import { verah } from '@/content/verah'
 import { useSessionMotion } from '@/lib/scroll/useSessionMotion'
 import { escalonar, filhoEscalonado } from '@/lib/motion/presets'
+import { asset, srcSetBook } from '@/lib/asset'
 
 export function Quintal() {
   const modo = useSessionMotion()
@@ -22,16 +23,20 @@ export function Quintal() {
           initial="oculto"
           whileInView="visivel"
           viewport={{ once: true, amount: 0.2 }}
-          className="mt-12 flex flex-wrap gap-2"
+          className="mt-12 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {lazer.itens.map((item) => (
             <motion.li
-              key={item}
+              key={item.nome}
               custom={modo}
               variants={filhoEscalonado}
-              className="rounded-full border border-cocoa/20 px-4 py-2 text-xs tracking-wide"
+              className="flex gap-3"
             >
-              {item}
+              <span className="mt-[0.45rem] h-1.5 w-1.5 shrink-0 rounded-full bg-brick" aria-hidden="true" />
+              <span>
+                <span className="block text-[15px]">{item.nome}</span>
+                {item.nota && <span className="block text-xs opacity-55">{item.nota}</span>}
+              </span>
             </motion.li>
           ))}
         </motion.ul>
@@ -44,12 +49,12 @@ export function Quintal() {
                 emite srcset, e a regra do projeto exige srcset em toda
                 imagem de conteudo. O `sizes` descreve a largura REAL de
                 renderizacao - 64rem e o max-w-5xl do container, nao 100vw.
-                O prefixo /verah e manual: o basePath do Next nao alcanca
+                O prefixo vem de `asset`: o basePath do Next nao alcanca
                 atributos de uma tag nativa.
               */}
               <img
-                src={`/verah${img.src}`}
-                srcSet={`/verah${img.src.replace('.jpg', '-640.jpg')} 640w, /verah${img.src} ${img.largura}w`}
+                src={asset(img.src)}
+                srcSet={srcSetBook(img)}
                 sizes="(min-width: 1024px) 64rem, 100vw"
                 alt={img.alt}
                 width={img.largura}

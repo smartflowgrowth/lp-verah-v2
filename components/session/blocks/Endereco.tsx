@@ -47,6 +47,7 @@ export function Endereco() {
         </motion.ul>
 
         <p className="mt-8 text-sm opacity-60">{endereco.infraestrutura}</p>
+        <p className="mt-2 text-[11px] italic opacity-45">{endereco.aviso}</p>
       </div>
     </Block>
   )

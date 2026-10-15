@@ -1,4 +1,5 @@
 import type { DadosLead } from './schema'
+import { PREVIA } from '@/lib/asset'
 
 export type ResultadoEnvio = { ok: true } | { ok: false; motivo: string }
 
@@ -31,6 +32,13 @@ function capturarUtms(): Record<string, string> {
 }
 
 export async function submitLead(dados: DadosLead): Promise<ResultadoEnvio> {
+  // A prévia roda em paralelo com a página no ar: nenhum lead de teste pode
+  // cair na base real.
+  if (PREVIA) {
+    console.info('[verah] prévia: lead não enviado', dados)
+    return { ok: true }
+  }
+
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
 

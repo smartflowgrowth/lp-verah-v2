@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Marcellus, Montserrat } from 'next/font/google'
 import { verah } from '@/content/verah'
+import { PREVIA } from '@/lib/asset'
 import './globals.css'
 
 const marcellus = Marcellus({
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
     description: DESCRICAO,
     images: [verah.seo.ogImagem],
   },
-  robots: { index: true, follow: true },
+  robots: PREVIA ? { index: false, follow: false } : { index: true, follow: true },
 }
 
 /**
@@ -75,14 +76,14 @@ function dadosEstruturados() {
         addressRegion: endereco.uf,
         addressCountry: 'BR',
       },
-      amenityFeature: verah.lazer.itens.map((nome) => ({
+      amenityFeature: verah.lazer.itens.map(({ nome }) => ({
         '@type': 'LocationFeatureSpecification',
         name: nome,
         value: true,
       })),
       accommodationFloorPlan: tipologias.map((t) => ({
         '@type': 'FloorPlan',
-        name: t.areaRotulo,
+        name: t.rotulo,
         numberOfBedrooms: t.dormitorios,
         floorSize: { '@type': 'QuantitativeValue', value: t.area, unitCode: 'MTK' },
       })),
@@ -117,6 +118,11 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${marcellus.variable} ${montserrat.variable}`}>
       <body>
         {children}
+        {PREVIA && (
+          <p className="pointer-events-none fixed left-3 top-3 z-[80] rounded-full bg-brick px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-cream">
+            Prévia — cadastros não são gravados
+          </p>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(dadosEstruturados()) }}

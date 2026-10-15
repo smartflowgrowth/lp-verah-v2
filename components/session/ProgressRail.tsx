@@ -10,6 +10,11 @@ import { useSessao } from './SessionProvider'
 export function ProgressRail() {
   const { progresso, blocoAtivo } = useSessao()
   const percentual = Math.round(progresso * 100)
+  // O herói tem a fachada com véu escuro por trás: ali o trilho inverte.
+  const sobreEscuro = blocoAtivo === 'vista'
+  const tom = sobreEscuro
+    ? { ativo: 'text-cream', inativo: 'text-cream/60 group-hover:text-cream', ponto: 'bg-cream/45 group-hover:bg-cream/80' }
+    : { ativo: 'text-cocoa', inativo: 'text-cocoa/55 group-hover:text-cocoa', ponto: 'bg-cocoa/35 group-hover:bg-cocoa/70' }
 
   return (
     <>
@@ -46,8 +51,8 @@ export function ProgressRail() {
                   <span
                     className={`text-[11px] uppercase transition-all duration-300 ${
                       ativo
-                        ? 'font-medium tracking-[0.2em] text-cocoa opacity-100'
-                        : 'tracking-[0.16em] text-cocoa/55 opacity-100 group-hover:text-cocoa'
+                        ? `font-medium tracking-[0.2em] ${tom.ativo} opacity-100`
+                        : `tracking-[0.16em] ${tom.inativo} opacity-100`
                     }`}
                   >
                     {bloco.rotulo}
@@ -55,7 +60,7 @@ export function ProgressRail() {
                   <span
                     aria-hidden="true"
                     className={`block rounded-full transition-all duration-300 ${
-                      ativo ? 'h-7 w-[3px] bg-gold' : 'h-[3px] w-[3px] bg-cocoa/35 group-hover:bg-cocoa/70'
+                      ativo ? 'h-7 w-[3px] bg-gold' : `h-[3px] w-[3px] ${tom.ponto}`
                     }`}
                   />
                 </a>

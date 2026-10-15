@@ -8,6 +8,7 @@ import { Block } from '../Block'
 import { verah } from '@/content/verah'
 import { useSessionMotion } from '@/lib/scroll/useSessionMotion'
 import { CtaPrincipal } from '../CtaPrincipal'
+import { asset, srcSetBook } from '@/lib/asset'
 
 export function Vista() {
   const raiz = useRef<HTMLDivElement>(null)
@@ -52,17 +53,37 @@ export function Vista() {
         })
         .to('[data-marca]', { y: -80, opacity: 0.15, ease: 'none' }, 0)
         .to('[data-serra]', { y: 40, ease: 'none' }, 0)
+        .to('[data-fachada]', { yPercent: 6, scale: 1.04, ease: 'none' }, 0)
     }, elemento)
 
     return () => ctx.revert()
   }, [modo.anima])
 
   return (
-    <Block id="vista" className="grao min-h-[100svh] overflow-hidden">
+    <Block id="vista" className="grao min-h-[100svh] overflow-hidden bg-cocoa text-cream">
       <div
         ref={raiz}
         className="relative flex min-h-[100svh] flex-col items-center justify-center px-6"
       >
+        {/* A fachada é o LCP: carrega cedo e sem lazy. É decorativa aqui — a
+            mesma imagem aparece com descrição no bloco da torre. */}
+        <div data-fachada className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+          <img
+            src={asset(verah.torre.fachada.src)}
+            srcSet={srcSetBook(verah.torre.fachada)}
+            sizes="100vw"
+            alt=""
+            width={verah.torre.fachada.largura}
+            height={verah.torre.fachada.altura}
+            fetchPriority="high"
+            decoding="async"
+            className="h-full w-full object-cover object-[50%_38%]"
+          />
+          {/* Véu cocoa: segura o contraste do nome e do CTA sobre o céu
+              claro do render, mais denso embaixo, onde fica o texto. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-cocoa/60 via-cocoa/55 to-cocoa/90" />
+        </div>
+
         <div data-marca className="relative z-10 text-center">
           <p className="mb-6 text-[11px] uppercase tracking-[0.42em] opacity-60">
             {verah.marca.selo}
@@ -93,7 +114,7 @@ export function Vista() {
           className="relative z-10 mt-6 md:mt-10"
           style={modo.anima ? { opacity: opacidadeCta } : undefined}
         >
-          <CtaPrincipal />
+          <CtaPrincipal claro />
         </motion.div>
 
         <div
@@ -105,15 +126,15 @@ export function Vista() {
             <path
               id="serra"
               d="M0 200 L140 150 L240 178 L360 96 L470 152 L560 118 L690 186 L810 128 L930 170 L1060 112 L1200 168"
-              stroke="var(--color-brick)"
+              stroke="var(--color-gold)"
               strokeWidth="1.5"
-              strokeOpacity="0.5"
+              strokeOpacity="0.6"
               strokeLinejoin="round"
             />
           </svg>
         </div>
 
-        <p className="absolute bottom-24 z-10 text-[10px] uppercase tracking-[0.28em] opacity-40 md:bottom-10">
+        <p className="absolute bottom-24 z-10 text-[10px] uppercase tracking-[0.28em] opacity-60 md:bottom-10">
           {verah.vista.convite}
         </p>
       </div>

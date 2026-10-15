@@ -182,11 +182,11 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
             >
               <input
                 type="radio"
-                value={t.areaRotulo}
+                value={t.rotulo}
                 className="sr-only"
                 {...register('plantaInteresse')}
               />
-              {t.areaRotulo}
+              {t.tipo} · {t.areaRotulo}
             </label>
           ))}
         </div>

@@ -18,8 +18,27 @@ describe('conteúdo do Verah', () => {
     expect(seguidos).toBe(false)
   })
 
-  it('tem as quatro tipologias reais do empreendimento', () => {
-    expect(verah.tipologias.map((t) => t.area)).toEqual([52, 54.7, 56, 70])
+  it('tem as quatro tipologias do book de vendas', () => {
+    expect(verah.tipologias.map((t) => [t.tipo, t.area])).toEqual([
+      ['B', 52],
+      ['C', 54],
+      ['D', 56],
+      ['A', 70],
+    ])
+  })
+
+  it('distribui os dez finais do andar entre as tipologias, sem repetir', () => {
+    const finais = verah.tipologias.flatMap((t) => t.finais).sort((a, b) => a - b)
+    expect(finais).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  })
+
+  it('tem planta humanizada em A, B e D; o C ainda não', () => {
+    const comPlanta = verah.tipologias.filter((t) => t.planta).map((t) => t.tipo)
+    expect(comPlanta.sort()).toEqual(['A', 'B', 'D'])
+  })
+
+  it('lista os 16 itens de lazer do book, sem contagem', () => {
+    expect(verah.lazer.itens).toHaveLength(16)
   })
 
   it('nomeia todas as cinco imagens do book', () => {

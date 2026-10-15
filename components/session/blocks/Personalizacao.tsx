@@ -14,7 +14,7 @@ export function Personalizacao() {
 
   return (
     <Block id="personalizacao" className="px-6 py-28 md:py-40">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
         <h2 className="font-display text-[clamp(2rem,6vw,4rem)] leading-[1.05]">
           {personalizacao.titulo}
         </h2>
@@ -28,10 +28,13 @@ export function Personalizacao() {
           initial="oculto"
           whileInView="visivel"
           viewport={{ once: true, amount: 0.3 }}
-          className="mt-16 grid gap-10 sm:grid-cols-3"
+          className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4"
         >
-          {personalizacao.pilares.map((pilar) => (
+          {personalizacao.pilares.map((pilar, i) => (
             <motion.div key={pilar.titulo} custom={modo} variants={filhoEscalonado}>
+              <p className="mb-4 text-xs tracking-[0.2em] text-brick">
+                {String(i + 1).padStart(2, '0')}
+              </p>
               <div className="mb-5 h-px w-10 bg-brick" />
               <h3 className="font-display text-xl leading-snug">{pilar.titulo}</h3>
               <p className="mt-3 text-sm leading-relaxed opacity-70">{pilar.texto}</p>
