@@ -185,9 +185,7 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
               className={chipRenda}
             >
               <input type="radio" value={valor} className="sr-only" {...register('renda')} />
-              {/* Espaços inseparáveis em "R$ 10 mil": se o chip quebrar, quebra
-                  entre as partes, nunca no meio do valor. */}
-              {ROTULO_RENDA[valor].replace(/R\$ (\d+) mil/g, 'R$\u00a0$1\u00a0mil').replace(/R\$ (\d+)/g, 'R$\u00a0$1')}
+              <RotuloRenda texto={ROTULO_RENDA[valor]} />
             </label>
           ))}
         </div>
@@ -272,5 +270,20 @@ export function LeadForm({ plantaInteresse, aoConcluir }: Props) {
         Ao enviar, você concorda em receber contato da equipe de vendas.
       </p>
     </form>
+  )
+}
+
+/**
+ * No celular as três faixas quebram sempre no mesmo ponto, antes do valor
+ * final ("R$ 5 a" / "R$ 10 mil", "Acima de" / "R$ 15 mil"), para os chips
+ * terem o mesmo desenho. No desktop voltam a uma linha.
+ */
+function RotuloRenda({ texto }: { texto: string }) {
+  const [inicio, valor] = texto.split(/ (?=R\$ \d+ mil$)/)
+  return (
+    <>
+      <span className="block sm:inline">{inicio.replace(/R\$ /g, 'R$\u00a0')}</span>{' '}
+      <span className="block sm:inline">{valor.replace(/ /g, '\u00a0')}</span>
+    </>
   )
 }
